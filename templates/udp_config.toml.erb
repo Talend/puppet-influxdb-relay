@@ -1,0 +1,30 @@
+<% unless @udp_outputs.empty? and @udp_output_servers.empty? -%>
+[[udp]]
+# Name of the UDP server, used for display purposes only.
+name = "<%= @udp_name -%>"
+
+# UDP address to bind to.
+bind-addr = "<%= @udp_bind_address -%>:<%= @udp_bind_port -%>"
+
+# Socket buffer size for incoming connections.
+read-buffer = <%= @udp_read_buffer %>
+
+# Precision to use for timestamps
+precision = '<%= @udp_precision %>'
+
+# Array of InfluxDB instances to use as backends for Relay.
+#   name: name of the backend, used for display purposes only.
+#   location: host and port of backend.
+#   mtu: maximum output payload size
+output = [
+<%   if @udp_outputs.empty? -%>
+<%     @udp_output_servers.each_index do |udpindex| -%>
+    { name='<%= scope['influxdb_relay::default_udp_name'] -%><%= udpindex -%>', location='<%= @udp_output_servers[udpindex] -%>', <% unless scope['influxdb_relay::default_udp_mtu'].nil? or scope['influxdb_relay::default_udp_mtu'].empty? or scope['influxdb_relay::default_udp_mtu'] == :undef -%>mtu=<%= scope['influxdb_relay::default_udp_mtu'] -%>, <% end -%>},
+<%     end #@udp_output_servers.each_index -%>
+<%   else -%>
+<%     @udp_outputs.each_index do |udpindex| -%>
+    { <% if @udp_outputs[udppindex].has_key?('name') -%>name='<%= @udp_outputs[udpindex]['name'] -%>', <% else -%>name='<%= scope['influxdb_relay::default_udp_name'] -%><%= udpindex -%>', <% end -%>location='<%= @udp_outputs[udpindex]['location'] -%>', <% if @udp_outputs[udpindex].has_key?('mtu') -%>mtu=<%= @udp_outputs[udpindex]['mtu'] -%>, <% else -%> <% unless scope['influxdb_relay::default_udp_mtu'].nil? or scope['influxdb_relay::default_udp_mtu'].empty? or scope['influxdb_relay::default_udp_mtu'] == :undef -%>mtu=<%= scope['influxdb_relay::default_udp_mtu'] -%>, <% end -%> <% end -%>},
+<%     end #@udp_outputs.each_index do -%>
+<%   end #if @udp_outputs.empty? -%>
+]
+<% end -%>

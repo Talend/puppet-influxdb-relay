@@ -1,0 +1,16 @@
+*.swp
+.venv
+vendor/
+.bundle/
+.idea/
+.reviewboardrc
+.ruby-version
+log
+.vagrant
+spec/fixtures
+.librarian/
+.kitchen/
+.kitchen.local.yml
+.tmp/
+modules/
+build/

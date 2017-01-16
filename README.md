@@ -3,7 +3,7 @@ Puppet module to manage influxdb-relay
 
 ## Example of use ##
 
-See [example](examples/init.pp) and the correspoding [hierafile](hieradata/environment/vagrant.yaml)
+See [example](examples/init.pp) and the corresponding [hierafile](hieradata/environment/vagrant.yaml)
 
 ## Testing ##
 to test locally the Puppet module:

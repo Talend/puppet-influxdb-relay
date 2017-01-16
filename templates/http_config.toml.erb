@@ -1,0 +1,30 @@
+<% unless @http_outputs.empty? and @http_output_servers.empty? -%>
+[[http]]
+# Name of the HTTP server, used for display purposes only.
+name = "<%= @http_name -%>"
+
+# TCP address to bind to, for HTTP server.
+bind-addr = "<%= @http_bind_address -%>:<%= @http_bind_port -%>"
+
+<%   if @http_ssl_enable -%>
+# Enable HTTPS requests.
+ssl-combined-pem = "<%= @http_ssl_pem -%>"
+
+<%   end -%>
+# Array of InfluxDB instances to use as backends for Relay.
+#   name: name of the backend, used for display purposes only.
+#   location: full URL of the /write endpoint of the backend
+#   timeout: Go-parseable time duration. Fail writes if incomplete in this time.
+#   skip-tls-verification: skip verification for HTTPS location. WARNING: it's insecure. Don't use in production.
+output = [
+<%   if @http_outputs.empty? -%>
+<%     @http_output_servers.each_index do |httpindex| -%>
+    { name='<%= scope['influxdb_relay::default_http_name'] -%><%= httpindex -%>', location='http://<%= @http_output_servers[httpindex] -%>/write', <% unless scope['influxdb_relay::default_http_timeout'].nil? or scope['influxdb_relay::default_http_timeout'].empty? or scope['influxdb_relay::default_http_timeout'] == :undef -%> timeout='<%= scope['influxdb_relay::default_http_timeout'] -%>', <% end -%><% unless scope['influxdb_relay::default_http_buffer_size_mb'].nil? or scope['influxdb_relay::default_http_buffer_size_mb'].empty? or scope['influxdb_relay::default_http_buffer_size_mb'] == :undef -%> buffer-size-mb=<%= scope['influxdb_relay::default_http_buffer_size_mb'] -%>, <% end -%><% unless scope['influxdb_relay::default_http_max_batch_kb'].nil? or scope['influxdb_relay::default_http_max_batch_kb'].empty? or scope['influxdb_relay::default_http_max_batch_kb'] == :undef -%>max-batch-kb=<%= scope['influxdb_relay::default_http_max_batch_kb'] -%>, <% end -%><% unless scope['influxdb_relay::default_http_max_delay_interval'].nil? or scope['influxdb_relay::default_http_max_delay_interval'].empty? or scope['influxdb_relay::default_http_max_delay_interval'] == :undef -%>max-delay-interval='<%= scope['influxdb_relay::default_http_max_delay_interval'] -%>', <% end -%><% unless scope['influxdb_relay::default_http_skip_tls_verification'].nil? or scope['influxdb_relay::default_http_skip_tls_verification'].empty? or scope['influxdb_relay::default_http_skip_tls_verification'] == :undef -%>skip-tls-verification=<%= scope['influxdb_relay::default_http_skip_tls_verification'].to_s -%>, <% end -%>},
+<%     end #@http_output_servers.each_index -%>
+<%   else -%>
+<%     @http_outputs.each_index do |httpindex| -%>
+    { <% if @http_outputs[httpindex].has_key?('name') -%>name='<%= @http_outputs[httpindex]['name'] -%>', <% else -%>name='<%= scope['influxdb_relay::default_http_name'] -%><%= httpindex -%>', <% end -%>location='<%= @http_outputs[httpindex]['location'] -%>', <% if @http_outputs[httpindex].has_key?('timeout') -%>timeout='<%= @http_outputs[httpindex]['timeout'] -%>', <% else -%><% unless scope['influxdb_relay::default_http_timeout'].nil? or scope['influxdb_relay::default_http_timeout'].empty? or scope['influxdb_relay::default_http_timeout'] == :undef -%>timeout='<%= scope['influxdb_relay::default_http_timeout'] -%>', <% end -%><% end -%><% if @http_outputs[httpindex].has_key?('buffer-size-mb') -%>buffer-size-mb=<%= @http_outputs[httpindex]['buffer-size-mb'] -%>, <% else -%><% unless scope['influxdb_relay::default_http_buffer_size_mb'].nil? or scope['influxdb_relay::default_http_buffer_size_mb'].empty? or scope['influxdb_relay::default_http_buffer_size_mb'] == :undef -%>buffer-size-mb=<%= scope['influxdb_relay::default_http_buffer_size_mb'] -%>, <% end -%><% end -%><% if @http_outputs[httpindex].has_key?('max-batch-kb') -%>max-batch-kb=<%= @http_outputs[httpindex]['max-batch-kb'] -%>, <% else -%><% unless scope['influxdb_relay::default_http_max_batch_kb'].nil? or scope['influxdb_relay::default_http_max_batch_kb'].empty? or scope['influxdb_relay::default_http_max_batch_kb'] == :undef -%>max-batch-kb=<%= scope['influxdb_relay::default_http_max_batch_kb'] -%>, <% end -%><% end -%><% if @http_outputs[httpindex].has_key?('max-delay-interval') -%>max-delay-interval='<%= @http_outputs[httpindex]['max-delay-interval'] -%>', <% else -%><% unless scope['influxdb_relay::default_http_max_delay_interval'].nil? or scope['influxdb_relay::default_http_max_delay_interval'].empty? or scope['influxdb_relay::default_http_max_delay_interval'] == :undef -%>max-delay-interval='<%= scope['influxdb_relay::default_http_max_delay_interval'] -%>', <% end -%><% end -%><% if @http_outputs[httpindex].has_key?('skip-tls-verification') -%>skip-tls-verification=<%= @http_outputs[httpindex]['skip-tls-verification'].to_s -%>, <% else -%><% unless scope['influxdb_relay::default_http_skip_tls_verification'].nil? or scope['influxdb_relay::default_http_skip_tls_verification'].empty? or scope['influxdb_relay::default_http_skip_tls_verification'] == :undef -%>skip-tls-verification=<%= scope['influxdb_relay::default_http_skip_tls_verification'].to_s -%>, <% end -%><% end -%>},
+<%     end #@http_output_servers.each_index do -%>
+<%   end #if @http_outputs.empty? -%>
+]
+<% end #unless @http_outputs.empty? and @http_output_servers.empty? -%>

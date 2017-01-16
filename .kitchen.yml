@@ -1,0 +1,37 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: puppet_apply
+  manifests_path: examples
+  ignore_spec_fixtures: true
+  puppet_environment: vagrant
+  hiera_data_path: hieradata
+  hiera_data_remote_path: /etc/puppet/hieradata
+  puppet_debug: true
+
+
+transport:
+  name: sftp
+
+platforms:
+  - name: centos-7.2
+    driver:
+      box: bento/centos-7.2
+  - name: debian-8.6
+    driver:
+      box: bento/debian-8.6
+
+verifier:
+  name: serverspec
+  remote_exec: false
+  extra_flags: '--require spec_helper -I spec/acceptance'
+
+suites:
+  - name: influxdb_relay
+    provisioner:
+      manifest: init.pp
+    verifier:
+      patterns:
+        - 'spec/acceptance/influxdb_relay_spec.rb'

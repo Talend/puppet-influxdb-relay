@@ -1,0 +1,16 @@
+---
+influxdb_relay::http_configurations:
+  testhttp:
+    http_output_servers:
+      - '127.0.0.2:7096'
+      - '127.0.0.3:7096'
+  test2http:
+    http_bind_port: 9098
+    http_output_servers:
+      - '127.0.0.2:7098'
+      - '127.0.0.3:7098'
+influxdb_relay::udp_configurations:
+  testudp:
+    udp_output_servers:
+      - '127.0.0.2:7089'
+      - '127.0.0.3:7089'

@@ -3,12 +3,15 @@ FORGE
   specs:
     computology-packagecloud (0.3.1)
       puppetlabs-stdlib (>= 0)
+    puppetlabs-apt (2.3.0)
+      puppetlabs-stdlib (< 5.0.0, >= 4.5.0)
     puppetlabs-concat (2.2.0)
       puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
     puppetlabs-stdlib (4.14.0)
 
 DEPENDENCIES
   computology-packagecloud (>= 0)
+  puppetlabs-apt (< 4.0.0, >= 2.3.0)
   puppetlabs-concat (< 3.0.0, >= 1.2.4)
   puppetlabs-stdlib (< 5.0.0, >= 1.0.0)
 

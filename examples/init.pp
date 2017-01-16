@@ -9,7 +9,18 @@
 # Learn more about module testing here:
 # https://docs.puppetlabs.com/guides/tests_smoke.html
 #
+case $::osfamily {
+  'Debian': {
+    $packagetype = 'deb'
+  }
+  'RedHat': {
+    $packagetype = 'rpm'
+  }
+  default: {
+    fail('This module support only Debian or RedHat OS family')
+  }
+}
 packagecloud::repo { 'talend/thirdparty':
-  type         => 'rpm',
+  type => $packagetype,
 } ->
 class { '::influxdb_relay': }

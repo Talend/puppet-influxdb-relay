@@ -8,6 +8,7 @@
   "project_page": "https://github.com/Talend/puppet-influxdb-relay",
   "issues_url": "https://github.com/Talend/puppet-influxdb-relay/issues",
   "dependencies": [
+    {"name":"puppetlabs/apt","version_requirement":">=2.3.0 <4.0.0"},
     {"name":"puppetlabs/stdlib","version_requirement":">=1.0.0 <5.0.0"},
     {"name": "puppetlabs/concat", "version_requirement": ">=1.2.4 <3.0.0"}
   ]
